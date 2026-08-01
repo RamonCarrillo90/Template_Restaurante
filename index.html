@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumière — Alta Cocina</title>
+
+<!-- Model Viewer (AR) -->
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Estilos -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Lumière</a>
+  <ul class="nav-links">
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#reservaciones">Reservaciones</a></li>
+  </ul>
+  <button class="nav-reserve" onclick="document.getElementById('reservaciones').scrollIntoView({behavior:'smooth'})">
+    Reservar mesa
+  </button>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Alta cocina · Ciudad de México</p>
+    <h1 class="hero-title">
+      El arte<br>en <em>cada</em><br>bocado
+    </h1>
+    <p class="hero-subtitle">Una experiencia gastronómica sin igual</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-primary">Ver el menú</a>
+      <a href="#reservaciones" class="btn-ghost">Reservar mesa</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Descubrir</span>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="intro">
+  <div class="intro-block">
+    <span class="intro-number">12</span>
+    <p class="intro-label">Años de excelencia</p>
+  </div>
+  <div class="intro-divider"></div>
+  <div class="intro-block">
+    <span class="intro-number">3</span>
+    <p class="intro-label">Estrellas Michelin</p>
+  </div>
+</div>
+
+<!-- ── MENÚ ── -->
+<section class="menu-section" id="menu">
+  <div class="section-header">
+    <p class="section-eyebrow">Nuestra propuesta</p>
+    <h2 class="section-title">El <em>menú</em> de temporada</h2>
+    <p class="section-desc">
+      Toca cualquier platillo para verlo en <strong>Realidad Aumentada</strong> —
+      visualiza sus dimensiones y presentación sobre tu mesa real.
+    </p>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="filterMenu('todos', this)">Todos</button>
+    <button class="menu-tab" onclick="filterMenu('entradas', this)">Entradas</button>
+    <button class="menu-tab" onclick="filterMenu('principales', this)">Principales</button>
+    <button class="menu-tab" onclick="filterMenu('postres', this)">Postres</button>
+  </div>
+
+  <div class="dishes-grid" id="dishesGrid"></div>
+</section>
+
+<!-- ── AR MODAL ── -->
+<div class="ar-overlay" id="arOverlay" onclick="closeAR(event)">
+  <div class="ar-modal" onclick="event.stopPropagation()">
+    <div class="ar-modal-header">
+      <h3 class="ar-modal-title" id="arModalTitle">Platillo</h3>
+      <button class="ar-close" onclick="closeAR()" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="ar-modal-body">
+
+      <!-- Visor 3D (cuando hay modelo .glb) -->
+      <div id="arViewerWrap" class="ar-viewer" style="display:none;">
+        <model-viewer
+          id="modelViewer"
+          src=""
+          alt="Modelo 3D del platillo"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          camera-controls
+          auto-rotate
+          shadow-intensity="1"
+          exposure="0.8">
+          <button slot="ar-button" class="btn-ar ar-launch-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            Ver en tu mesa →
+          </button>
+        </model-viewer>
+      </div>
+
+      <!-- Fallback: instrucciones cuando no hay modelo cargado -->
+      <div class="ar-fallback" id="arFallback">
+        <div class="ar-fallback-icon" id="arFallbackEmoji">🍽️</div>
+        <h3 class="ar-fallback-title" id="arFallbackTitle">Vista en Realidad Aumentada</h3>
+        <p class="ar-fallback-text">
+          Esta función coloca el platillo en 3D sobre tu mesa real usando la cámara
+          de tu teléfono. No requiere ninguna aplicación.
+        </p>
+        <div class="ar-steps">
+          <div class="ar-step">
+            <div class="ar-step-num">1</div>
+            <p class="ar-step-text">Abre esta página en Safari (iPhone) o Chrome (Android)</p>
+          </div>
+          <div class="ar-step">
+            <div class="ar-step-num">2</div>
+            <p class="ar-step-text">Toca el platillo que deseas ver en el menú</p>
+          </div>
+          <div class="ar-step">
+            <div class="ar-step-num">3</div>
+            <p class="ar-step-text">Pulsa <strong>"Ver en tu mesa"</strong> en el visor 3D</p>
+          </div>
+          <div class="ar-step">
+            <div class="ar-step-num">4</div>
+            <p class="ar-step-text">Apunta tu cámara a la mesa y observa el platillo en tamaño real</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info del platillo -->
+      <div class="ar-info">
+        <p class="ar-info-title">Sobre este platillo</p>
+        <p class="ar-info-text" id="arInfoText">—</p>
+      </div>
+
+      <div class="ar-actions">
+        <button class="btn-primary" onclick="closeAR()">Volver al menú</button>
+        <button class="btn-ghost" onclick="document.getElementById('reservaciones').scrollIntoView({behavior:'smooth'}); closeAR()">
+          Reservar para probarlo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── NOSOTROS ── -->
+<section class="about-section" id="nosotros">
+  <div class="about-visual">
+    <div class="about-visual-text">Desde<br>2012</div>
+  </div>
+  <div class="about-content">
+    <p class="section-eyebrow">Nuestra historia</p>
+    <h2 class="about-title">Cocina de autor con raíces mexicanas</h2>
+    <p class="about-body">
+      Lumière nació de la convicción de que la alta cocina debe ser también una experiencia
+      del territorio. Cada ingrediente en nuestro menú es seleccionado directamente de
+      productores locales, y cada técnica dialoga entre la tradición mexicana y la vanguardia europea.
+      <br><br>
+      Somos el único restaurante en México que ofrece una experiencia de menú en Realidad
+      Aumentada, para que puedas anticipar cada platillo antes de ordenarlo.
+    </p>
+    <div class="about-chef">
+      <div class="chef-avatar">👨‍🍳</div>
+      <div>
+        <p class="chef-info-name">Chef Marco Villanueva</p>
+        <p class="chef-info-role">Chef ejecutivo &amp; fundador</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESERVACIONES ── -->
+<section class="reservation-section" id="reservaciones">
+  <div class="reservation-inner">
+    <p class="section-eyebrow">Reserve su experiencia</p>
+    <h2 class="section-title">Una <em>mesa</em> para usted</h2>
+    <p class="section-desc">Confirmaremos su reserva en menos de 2 horas.</p>
+
+    <form class="reservation-form" onsubmit="handleReserve(event)">
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input class="form-input" type="text" placeholder="Juan Martínez" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Teléfono</label>
+        <input class="form-input" type="tel" placeholder="+52 55 0000 0000" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha</label>
+        <input class="form-input" type="date" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hora</label>
+        <select class="form-select">
+          <option>13:00</option><option>14:00</option><option>15:00</option>
+          <option>19:00</option><option>20:00</option><option>21:00</option><option>22:00</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Número de personas</label>
+        <select class="form-select">
+          <option>1 persona</option><option>2 personas</option>
+          <option>3 personas</option><option>4 personas</option>
+          <option>5 personas</option><option>6 personas</option>
+          <option>Grupo mayor (7+)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ocasión especial</label>
+        <select class="form-select">
+          <option>Sin ocasión especial</option>
+          <option>Aniversario</option><option>Cumpleaños</option>
+          <option>Cena de negocios</option><option>Propuesta de matrimonio</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Notas adicionales</label>
+        <input class="form-input" type="text" placeholder="Alergias, preferencias, solicitudes especiales…">
+      </div>
+      <div class="form-group full">
+        <button type="submit" class="btn-reserve">Solicitar reservación</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand-block">
+    <div class="footer-brand">Lumière</div>
+    <p class="footer-tagline">
+      Alta cocina mexicana de autor en el corazón de Polanco, Ciudad de México.
+      Tres estrellas Michelin, experiencia AR exclusiva.
+    </p>
+  </div>
+  <div>
+    <p class="footer-col-title">Visítanos</p>
+    <ul class="footer-links">
+      <li><a href="#">Av. Presidente Masaryk 123</a></li>
+      <li><a href="#">Polanco, CDMX</a></li>
+      <li><a href="#">Lun – Dom: 13:00 – 23:00</a></li>
+      <li><a href="#">+52 55 1234 5678</a></li>
+    </ul>
+  </div>
+  <div>
+    <p class="footer-col-title">Menú</p>
+    <ul class="footer-links">
+      <li><a href="#menu">Carta de temporada</a></li>
+      <li><a href="#menu">Menú degustación</a></li>
+      <li><a href="#menu">Maridaje de vinos</a></li>
+      <li><a href="#reservaciones">Eventos privados</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2025 Lumière Restaurante — Todos los derechos reservados</p>
+  <span class="footer-ar-badge">✦ Experiencia AR incluida</span>
+</div>
+
+<!-- Scripts -->
+<script src="js/dishes.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
