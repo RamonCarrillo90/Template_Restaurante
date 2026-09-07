@@ -77,7 +77,7 @@ function openAR(id) {
   if (dish.modelSrc) {
     // Cargar modelo en el visor 3D
     mv.src = dish.modelSrc;
-
+    mv.setAttribute('scale', dish.arScale || '1 1 1');
     // ── iOS Quick Look ──
     // Safari exige: <a rel="ar" href="modelo.glb"><img ...> como PRIMER hijo</a>
     // El href del <a> Y el src del <img> deben apuntar al mismo .glb

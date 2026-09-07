@@ -37,6 +37,7 @@ const dishes = [
     emoji: "🌮",
     image: "",
     modelSrc: "assets/models/Meshy_AI_Vibrant_Street_Tacos_0907063803_generate.glb",
+    arScale: "0.12 0.04 0.12",  // ancho alto profundidad en metros,
     info: "Porción de 2 tacos. Diámetro de tortilla: 12cm. Presentado en comal de barro sobre la mesa. Contiene gluten."
   },
   {
