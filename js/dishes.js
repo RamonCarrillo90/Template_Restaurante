@@ -49,7 +49,7 @@ const dishes = [
     price: "$890",
     emoji: "🥩",
     image: "",
-    modelSrc: "assets/models/Astronaut.glb",
+    modelSrc: "C:/Users/carri/Downloads/lumiere-restaurante2/lumiere-restaurante/assets/models/Meshy_AI_Vibrant_Street_Tacos_COLOREADO.glb",
     info: "Corte de 200g. Largo: 14cm. Término medio por defecto. Contiene gluten y lácteos."
   },
   {
