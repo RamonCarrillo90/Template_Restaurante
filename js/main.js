@@ -72,15 +72,17 @@ function openAR(id) {
   const viewerWrap = document.getElementById('arViewerWrap');
   const fallback   = document.getElementById('arFallback');
   const arBtnIOS   = document.getElementById('arBtnIOS');
+  const arBtnImg   = document.getElementById('arBtnImg');
 
   if (dish.modelSrc) {
     // Cargar modelo en el visor 3D
     mv.src = dish.modelSrc;
 
     // ── iOS Quick Look ──
-    // Safari requiere un <a rel="ar" href="URL_DEL_MODELO"> para lanzar AR.
-    // El href debe apuntar directamente al archivo .glb o .usdz.
+    // Safari exige: <a rel="ar" href="modelo.glb"><img ...> como PRIMER hijo</a>
+    // El href del <a> Y el src del <img> deben apuntar al mismo .glb
     arBtnIOS.href = dish.modelSrc;
+    document.getElementById('arBtnImg').src = dish.modelSrc;
 
     viewerWrap.style.display = 'block';
     fallback.style.display   = 'none';

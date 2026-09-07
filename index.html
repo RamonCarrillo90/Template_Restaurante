@@ -102,14 +102,22 @@
           El <img> hijo vacío es requerido por la spec de Apple.
         -->
         <div class="ar-btn-row">
+          <!--
+            IMPORTANTE — Spec de Apple para Quick Look AR en Safari:
+            El <img> DEBE ser el primer hijo del <a rel="ar">.
+            Si hay cualquier otro elemento antes (como un SVG), Safari lo ignora
+            y el AR no se lanza. El img puede ser invisible pero debe ir primero.
+          -->
           <a id="arBtnIOS" class="btn-ar-big" href="#" rel="ar">
-            <img src="" alt="" style="position:absolute;width:0;height:0;opacity:0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-              <path d="M2 17l10 5 10-5"/>
-              <path d="M2 12l10 5 10-5"/>
-            </svg>
-            Ver en tu mesa (AR)
+            <img id="arBtnImg" src="" alt="" width="0" height="0" style="opacity:0;position:absolute;">
+            <span class="ar-btn-inner">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+              Ver en tu mesa (AR)
+            </span>
           </a>
         </div>
 
