@@ -36,7 +36,7 @@ const dishes = [
     price: "$290",
     emoji: "🌮",
     image: "",
-    modelSrc: "C:/Users/carri/Downloads/lumiere-restaurante2/lumiere-restaurante/assets/model/Astronaut.glb",
+    modelSrc: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
     info: "Porción de 2 tacos. Diámetro de tortilla: 12cm. Presentado en comal de barro sobre la mesa. Contiene gluten."
   },
   {
