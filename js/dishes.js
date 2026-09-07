@@ -36,7 +36,7 @@ const dishes = [
     price: "$290",
     emoji: "🌮",
     image: "",
-    modelSrc: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+    modelSrc: "",
     info: "Porción de 2 tacos. Diámetro de tortilla: 12cm. Presentado en comal de barro sobre la mesa. Contiene gluten."
   },
   {
@@ -48,7 +48,8 @@ const dishes = [
     price: "$890",
     emoji: "🥩",
     image: "",
-    modelSrc: "C:/Users/carri/Downloads/lumiere-restaurante2/lumiere-restaurante/assets/models/Meshy_AI_Vibrant_Street_Tacos_0907063803_generate.glb",
+    // Modelo de demostración (sustituye con tu propio .glb en assets/models/)
+    modelSrc: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
     info: "Corte de 200g. Largo: 14cm. Término medio por defecto. Contiene gluten y lácteos."
   },
   {

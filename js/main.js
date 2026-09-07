@@ -1,12 +1,5 @@
 /**
  * main.js — Lógica principal de Lumière
- *
- * Incluye:
- *  - Render y filtrado del menú
- *  - Modal de Realidad Aumentada (WebXR via <model-viewer>)
- *  - Partículas animadas en el hero
- *  - Nav con efecto scroll
- *  - Formulario de reservaciones
  */
 
 /* ══════════════════════════
@@ -70,24 +63,28 @@ function openAR(id) {
   const dish = dishes.find(d => d.id === id);
   if (!dish) return;
 
-  // Actualizar textos del modal
   document.getElementById('arModalTitle').textContent = dish.name;
   document.getElementById('arFallbackEmoji').textContent = dish.emoji;
   document.getElementById('arFallbackTitle').textContent = dish.name + ' en AR';
   document.getElementById('arInfoText').textContent = dish.info;
 
-  const mv          = document.getElementById('modelViewer');
-  const viewerWrap  = document.getElementById('arViewerWrap');
-  const fallback    = document.getElementById('arFallback');
+  const mv         = document.getElementById('modelViewer');
+  const viewerWrap = document.getElementById('arViewerWrap');
+  const fallback   = document.getElementById('arFallback');
+  const arBtnIOS   = document.getElementById('arBtnIOS');
 
   if (dish.modelSrc) {
-    // Tiene modelo 3D → mostrar visor WebXR
+    // Cargar modelo en el visor 3D
     mv.src = dish.modelSrc;
-    mv.setAttribute('ios-src', dish.iosSrc || '');
+
+    // ── iOS Quick Look ──
+    // Safari requiere un <a rel="ar" href="URL_DEL_MODELO"> para lanzar AR.
+    // El href debe apuntar directamente al archivo .glb o .usdz.
+    arBtnIOS.href = dish.modelSrc;
+
     viewerWrap.style.display = 'block';
     fallback.style.display   = 'none';
   } else {
-    // Sin modelo → mostrar instrucciones
     mv.src = '';
     viewerWrap.style.display = 'none';
     fallback.style.display   = 'block';
@@ -98,13 +95,11 @@ function openAR(id) {
 }
 
 function closeAR(e) {
-  // Si se pasa un evento, solo cerrar si el click fue en el fondo
   if (e && e.target !== document.getElementById('arOverlay')) return;
   document.getElementById('arOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-// Cerrar con Escape
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.getElementById('arOverlay').classList.remove('open');
@@ -139,35 +134,26 @@ function initParticles() {
 
 function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   particles.forEach(p => {
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
     ctx.fill();
-
-    p.x += p.vx;
-    p.y += p.vy;
-
+    p.x += p.vx; p.y += p.vy;
     if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
     if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
   });
-
   requestAnimationFrame(drawParticles);
 }
 
 resizeCanvas();
 initParticles();
 drawParticles();
-
-window.addEventListener('resize', () => {
-  resizeCanvas();
-  initParticles();
-});
+window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
 
 
 /* ══════════════════════════
-   NAV — EFECTO SCROLL
+   NAV — SCROLL
    ══════════════════════════ */
 
 window.addEventListener('scroll', () => {
@@ -181,16 +167,11 @@ window.addEventListener('scroll', () => {
 
 function handleReserve(e) {
   e.preventDefault();
-
   const btn = e.target.querySelector('.btn-reserve');
   const original = btn.textContent;
-
-  btn.textContent       = '✓ Solicitud enviada — le confirmaremos pronto';
-  btn.style.background  = '#1a5c2a';
-  btn.style.color       = '#a8e6bc';
-
-  // Aquí conecta tu backend o servicio de reservas (ej. Formspree, EmailJS, etc.)
-
+  btn.textContent      = '✓ Solicitud enviada — le confirmaremos pronto';
+  btn.style.background = '#1a5c2a';
+  btn.style.color      = '#a8e6bc';
   setTimeout(() => {
     btn.textContent      = original;
     btn.style.background = '';
