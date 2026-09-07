@@ -100,15 +100,14 @@
       <!-- Visor 3D (cuando hay modelo .glb) -->
       <div id="arViewerWrap" class="ar-viewer" style="display:none;">
         <model-viewer
-          id="modelViewer"
-          src=""
-          alt="Modelo 3D del platillo"
-          ar
-          ar-modes="webxr scene-viewer quick-look"
-          camera-controls
-          auto-rotate
-          shadow-intensity="1"
-          exposure="0.8">
+        id="modelViewer"
+        src=""
+        ios-src=""
+        alt="Modelo 3D del platillo"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        auto-rotate>
           <button slot="ar-button" class="btn-ar ar-launch-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>

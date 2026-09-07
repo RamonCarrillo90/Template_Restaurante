@@ -83,6 +83,7 @@ function openAR(id) {
   if (dish.modelSrc) {
     // Tiene modelo 3D → mostrar visor WebXR
     mv.src = dish.modelSrc;
+    mv.setAttribute('ios-src', dish.iosSrc || '');
     viewerWrap.style.display = 'block';
     fallback.style.display   = 'none';
   } else {
